@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.iocoder.mall.user.biz.dao.UserMapper">
+    <sql id="FIELDS">
+      id, mobile, nickname, avatar, status,
+      create_time, deleted
+    </sql>
+
+    <select id="selectById" parameterType="Integer" resultType="UserDO">
+        SELECT
+        <include refid="FIELDS"/>
+        FROM users
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+</mapper>
