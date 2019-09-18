@@ -4,13 +4,14 @@ import cn.iocoder.common.framework.vo.CommonResult;
 import cn.iocoder.mall.user.application.po.UserAddressAddPO;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("users/address")
 @Controller
+//@Validated
 public class UserAddressController {
 
 
@@ -20,6 +21,13 @@ public class UserAddressController {
 //        Integer userId = UserSecurityContextHolder.getContext().getUserId();
 //        UserAddressAddDTO userAddressAddDTO = UserAddressConvert.INSTANCE.convert(userAddressAddPO);
 //        userAddressAddDTO.setUserId(userId);
+        return null;
+    }
+
+    @DeleteMapping("remove")
+    public CommonResult removeAddress(@NotNull(message = "用户编号不能为空") @RequestParam("id") Integer id) {
+//        Integer userId = UserSecurityContextHolder.getContext().getUserId();
+//        return userAddressService.removeAddress(userId, id);
         return null;
     }
 }

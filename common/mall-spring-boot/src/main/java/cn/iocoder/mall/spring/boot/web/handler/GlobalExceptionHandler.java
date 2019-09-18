@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -65,16 +67,27 @@ public class GlobalExceptionHandler {
         StringBuilder detailMessage = new StringBuilder("\n\n详细错误如下：");
         ex.getConstraintViolations().forEach(constraintViolation -> detailMessage.append("\n").append(constraintViolation.getMessage()));
         return CommonResult.error(SysErrorCodeEnum.VALIDATION_REQUEST_PARAM_ERROR.getCode(), SysErrorCodeEnum.VALIDATION_REQUEST_PARAM_ERROR.getMessage()
-            + detailMessage.toString());
+                + detailMessage.toString());
     }
 
     //TODO 处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常。 https://www.cnblogs.com/fqybzhangji/p/10384347.html
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public CommonResult methodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
-        System.out.println();
-        return null;
+    public CommonResult methodArgumentNotValidExceptionHandler(HttpServletRequest req, MethodArgumentNotValidException ex) {
+        logger.info("[methodArgumentNotValidExceptionHandler]", ex);
+        BindingResult bindingResult = ex.getBindingResult();
+        StringBuilder errorMessage = new StringBuilder(bindingResult.getFieldErrors().size() * 16);
+        errorMessage.append("Invalid Request:");
+        for (int i = 0; i < bindingResult.getFieldErrors().size(); i++) {
+            if (i>0){
+                errorMessage.append(",");
+            }
+            FieldError fieldError = bindingResult.getFieldErrors().get(i);
+            errorMessage.append(fieldError.getField());
+            errorMessage.append(":");
+            errorMessage.append(fieldError.getDefaultMessage());
+        }
+        return CommonResult.error(SysErrorCodeEnum.VALIDATION_REQUEST_PARAM_ERROR.getCode(), errorMessage.toString());
     }
 
 
