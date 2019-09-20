@@ -6,11 +6,14 @@ import cn.iocoder.common.framework.util.HttpUtil;
 import cn.iocoder.common.framework.util.MallUtil;
 import cn.iocoder.mall.admin.api.OAuth2Service;
 import cn.iocoder.mall.admin.api.bo.oauth2.OAuth2AuthenticationBO;
+import cn.iocoder.mall.admin.api.constant.AdminErrorCodeEnum;
 import cn.iocoder.mall.admin.api.dto.oauth2.OAuth2GetTokenDTO;
+import cn.iocoder.mall.user.sdk.annotation.RequiresLogin;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * User 安全拦截器
  */
 @Component
-public class UserSecurityInterceptor implements HandlerInterceptor {
+public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
 
 
     @Reference(validation = "true", version = "${dubbo.consumer.OAuth2Service.version:1.0.0}")
@@ -42,13 +45,26 @@ public class UserSecurityInterceptor implements HandlerInterceptor {
                 serviceException = e;
             }
         }
+        // 进行鉴权
+        HandlerMethod method = (HandlerMethod) handler;
+        boolean requiresLogin = method.hasMethodAnnotation(RequiresLogin.class);
+        if (requiresLogin) {// 如果需要鉴权
+            if (serviceException != null) {// 认证失败，抛出上面认证失败的 ServiceException 异常
+                throw serviceException;
+            }
+            if (authentication == null) {// 无认证信息，抛出未登陆 ServiceException 异常
+                throw new ServiceException(AdminErrorCodeEnum.OAUTH2_NOT_LOGIN.getCode(), AdminErrorCodeEnum.OAUTH2_NOT_LOGIN.getMessage());
+            }
+        }
 
 
-        return false;
+        return super.preHandle(request, response, handler);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+        System.out.println("结束");
     }
+
+
 }
