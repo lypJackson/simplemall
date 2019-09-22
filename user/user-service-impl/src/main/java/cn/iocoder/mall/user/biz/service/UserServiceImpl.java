@@ -19,9 +19,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBO getUser(Integer userId) {
-        if (true){
-            throw ServiceExceptionUtil.exception(UserErrorCodeEnum.MOBILE_CODE_USED.getCode());
-        }
         return UserConvert.INSTANCE.convert(userMapper.selectById(userId));
     }
 

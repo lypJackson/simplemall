@@ -6,6 +6,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 
+/**
+ * 加载错误码的方案
+ */
 @Configuration
 public class ServiceExceptionConfiguration {
 

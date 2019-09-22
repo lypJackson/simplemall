@@ -2,7 +2,7 @@ package cn.iocoder.common.framework.util;
 
 import cn.iocoder.common.framework.constant.MallConstants;
 import cn.iocoder.common.framework.vo.CommonResult;
-//import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 
 import javax.servlet.ServletRequest;
 import java.util.UUID;
@@ -42,13 +42,13 @@ public class MallUtil {
      *
      * @return 链路追踪编号
      */
-//    public static String getTraceId() {
-//        String traceId = TraceContext.traceId();
-//        if (StringUtil.hasText(traceId)) {
-//            return traceId;
-//        }
-//        // TODO 芋艿 多次调用会问题
-//        return UUID.randomUUID().toString();
-//    }
+    public static String getTraceId() {
+        String traceId = TraceContext.traceId();
+        if (StringUtil.hasText(traceId)) {
+            return traceId;
+        }
+        // TODO 芋艿 多次调用会问题
+        return UUID.randomUUID().toString();
+    }
 
 }

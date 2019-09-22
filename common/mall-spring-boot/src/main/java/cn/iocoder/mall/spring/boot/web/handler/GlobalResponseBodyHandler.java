@@ -10,6 +10,9 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+/**
+ * 使用 ResponseBodyAdvice 拦截Controller方法默认返回参数，统一处理返回值/响应体
+ */
 @ControllerAdvice
 public class GlobalResponseBodyHandler implements ResponseBodyAdvice {
 

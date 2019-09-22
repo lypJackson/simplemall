@@ -40,5 +40,13 @@ dubbo:
     base-packages: cn.iocoder.mall.admin.service
   provider:
     filter: -exception
+    AdminAccessLogService:
+      version: 1.0.0
     OAuth2Service:
       version: 1.0.0
+
+# logging
+logging:
+  level:
+    # dao 开启 debug 模式 mybatis 输入 sql
+    cn.iocoder.mall.admin.dao: debug

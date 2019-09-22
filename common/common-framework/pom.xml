@@ -55,6 +55,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <!-- 监控相关 -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+        </dependency>
+
         <!-- 工具相关 -->
         <dependency>
             <groupId>org.hibernate</groupId>

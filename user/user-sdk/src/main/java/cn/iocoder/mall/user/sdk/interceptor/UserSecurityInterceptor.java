@@ -9,6 +9,8 @@ import cn.iocoder.mall.admin.api.bo.oauth2.OAuth2AuthenticationBO;
 import cn.iocoder.mall.admin.api.constant.AdminErrorCodeEnum;
 import cn.iocoder.mall.admin.api.dto.oauth2.OAuth2GetTokenDTO;
 import cn.iocoder.mall.user.sdk.annotation.RequiresLogin;
+import cn.iocoder.mall.user.sdk.context.UserSecurityContext;
+import cn.iocoder.mall.user.sdk.context.UserSecurityContextHolder;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -58,12 +60,20 @@ public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
         }
 
 
+        // 鉴权完成，初始化 AdminSecurityContext 上下文
+        UserSecurityContext context = new UserSecurityContext();
+        UserSecurityContextHolder.setContext(context);
+        if (authentication!=null){
+            context.setUserId(authentication.getUserId());
+            MallUtil.setUserId(request,authentication.getUserId());
+        }
         return super.preHandle(request, response, handler);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("结束");
+        // 清空 SecurityContext
+        UserSecurityContextHolder.clear();
     }
 
 

@@ -6,6 +6,7 @@ import cn.iocoder.mall.user.api.bo.UserBO;
 import cn.iocoder.mall.user.api.dto.UserUpdateDTO;
 import cn.iocoder.mall.user.application.convert.UserConvert;
 import cn.iocoder.mall.user.application.vo.users.UsersUserVO;
+import cn.iocoder.mall.user.sdk.context.UserSecurityContextHolder;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class UserController {
 
     @GetMapping("/info")
     public CommonResult<UsersUserVO> info() {
-        UserBO userResult = userService.getUser(112);
+        UserBO userResult = userService.getUser(UserSecurityContextHolder.getContext().getUserId());
         return success(UserConvert.INSTANCE.convert2(userResult));
     }
 
