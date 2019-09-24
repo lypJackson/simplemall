@@ -31,6 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
 
+/**
+ * 捕捉校验参数异常并统一处理
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -47,7 +50,12 @@ public class GlobalExceptionHandler {
     @Reference(validation = "true", version = "${dubbo.consumer.AdminAccessLogService.version:1.0.0}")
     private SystemLogService systemLogService;
 
-    // 逻辑异常
+    /**
+     * 逻辑异常,手动throw出去
+     * @param req
+     * @param ex
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(value = ServiceException.class)
     public CommonResult serviceExceptionHandler(HttpServletRequest req, ServiceException ex) {
@@ -55,7 +63,12 @@ public class GlobalExceptionHandler {
         return CommonResult.error(ex.getCode(), ex.getMessage());
     }
 
-    // Spring MVC 参数不正确
+    /**
+     * Spring MVC 参数不正确
+     * @param req
+     * @param ex
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     public CommonResult missingServletRequestParameterExceptionHandler(HttpServletRequest req, MissingServletRequestParameterException ex) {
@@ -63,7 +76,12 @@ public class GlobalExceptionHandler {
         return CommonResult.error(SysErrorCodeEnum.MISSING_REQUEST_PARAM_ERROR.getCode(), SysErrorCodeEnum.MISSING_REQUEST_PARAM_ERROR.getMessage() + ":" + ex.getMessage());
     }
 
-    //TODO 处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException
+    /**
+     *  处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException，使用时需要将@Validated加到Controller上边
+     * @param req
+     * @param ex
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(value = ConstraintViolationException.class)
     public CommonResult constraintViolationExceptionHandler(HttpServletRequest req, ConstraintViolationException ex) {
@@ -76,6 +94,12 @@ public class GlobalExceptionHandler {
                 + detailMessage.toString());
     }
 
+    /**
+     * 处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常
+     * @param req
+     * @param ex
+     * @return
+     */
     //TODO 处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常。 https://www.cnblogs.com/fqybzhangji/p/10384347.html
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

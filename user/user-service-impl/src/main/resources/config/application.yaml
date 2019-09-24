@@ -32,6 +32,8 @@ dubbo:
     base-packages: cn.iocoder.mall.user.biz.service
   provider:
     filter: -exception
+    UserAddressService:
+      version: 1.0.0
     UserService:
       version: 1.0.0
     OAuth2Service:
