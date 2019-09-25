@@ -5,9 +5,7 @@ import cn.iocoder.mall.user.api.UserService;
 import cn.iocoder.mall.user.api.bo.user.UserAuthenticationBO;
 import cn.iocoder.mall.user.api.dto.UserAuthenticationByMobileCodeDTO;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("users/passport")
 public class PassportController {
 
-    @Reference(validation = "true",version = "${dubbo.provider.UserService.version}")
+    @Reference(validation = "true", version = "${dubbo.provider.UserService.version}")
     UserService userService;
 
     @PostMapping("/mobile/register")
-    public CommonResult<UserAuthenticationBO> mobileRegister(@RequestBody @Validated UserAuthenticationByMobileCodeDTO userAuthenticationByMobileCodeDTO){
-
-        return null;
+    public CommonResult<UserAuthenticationBO> mobileRegister(UserAuthenticationByMobileCodeDTO userAuthenticationByMobileCodeDTO) {
+        return CommonResult.success(userService.authenticationByMobileCode(userAuthenticationByMobileCodeDTO));
     }
 }
