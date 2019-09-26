@@ -1,11 +1,12 @@
 package cn.iocoder.mall.user.biz.dataobject;
 
+import cn.iocoder.common.framework.dataobject.DeletableDO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class UserDO {
+public class UserDO extends DeletableDO {
     /**
      * 用户编号
      */

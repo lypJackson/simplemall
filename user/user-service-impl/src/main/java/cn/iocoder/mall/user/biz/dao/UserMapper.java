@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
     UserDO selectById(@Param("id") Integer id);
+
+    UserDO selectByMobile(@Param("mobile") String mobile);
+
+    void insert(UserDO entity);
 }

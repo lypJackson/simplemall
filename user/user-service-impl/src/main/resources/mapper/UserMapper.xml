@@ -6,11 +6,29 @@
       create_time, deleted
     </sql>
 
+    <insert id="insert" parameterType="UserDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users(
+            id,mobile,status,create_time,deleted
+            )VALUES (
+            #{id},#{mobile},#{status},#{createTime},#{deleted}
+            )
+    </insert>
+
+
+
     <select id="selectById" parameterType="Integer" resultType="UserDO">
         SELECT
         <include refid="FIELDS"/>
         FROM users
         WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <select id="selectByMobile" parameterType="String" resultType="UserDO">
+        SELECT
+        <include refid="FIELDS"/>
+        FROM users
+        WHERE mobile = #{mobile}
         AND deleted = 0
     </select>
 </mapper>
