@@ -1,5 +1,6 @@
 package cn.iocoder.mall.admin.service;
 
+import cn.iocoder.common.framework.constant.SysErrorCodeEnum;
 import cn.iocoder.common.framework.util.ServiceExceptionUtil;
 import cn.iocoder.mall.admin.api.OAuth2Service;
 import cn.iocoder.mall.admin.api.bo.oauth2.OAuth2AccessTokenBO;
@@ -15,6 +16,7 @@ import cn.iocoder.mall.admin.dataobject.OAuth2RefreshTokenDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -44,6 +46,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
 
     @Override
+    @Transactional
     public OAuth2AccessTokenBO createToken(OAuth2CreateTokenDTO oAuth2CreateTokenDTO) {
         Integer userId = oAuth2CreateTokenDTO.getUserId();
         Integer userType = oAuth2CreateTokenDTO.getUserType();
@@ -51,6 +54,9 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         OAuth2RefreshTokenDO oAuth2RefreshTokenDO = createOAuth2RefreshToken(userId, userType);
         //创建访问令牌
         OAuth2AccessTokenDO oAuth2AccessTokenDO = createOAuth2AccessToken(userId, userType, oAuth2RefreshTokenDO.getId());
+        if (userId!=null){
+            throw ServiceExceptionUtil.exception(SysErrorCodeEnum.VALIDATION_REQUEST_PARAM_ERROR.getCode());
+        }
         //转换返回
         return OAuth2Convert.INSTANCE.convertToAccessTokenWithExpiresIn(oAuth2AccessTokenDO);
     }

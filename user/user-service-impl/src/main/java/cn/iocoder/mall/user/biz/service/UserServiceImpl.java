@@ -24,6 +24,7 @@ import cn.iocoder.mall.user.biz.dataobject.UserRegisterDO;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     OAuth2Service oAuth2Service;
 
     @Override
+    @Transactional
     public UserAuthenticationBO authenticationByMobileCode(UserAuthenticationByMobileCodeDTO userAuthenticationByMobileCodeDTO) {
         String mobile = userAuthenticationByMobileCodeDTO.getMobile();
         String code = userAuthenticationByMobileCodeDTO.getCode();
