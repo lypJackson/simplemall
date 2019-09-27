@@ -1,6 +1,5 @@
 package cn.iocoder.mall.admin.service;
 
-import cn.iocoder.common.framework.constant.SysErrorCodeEnum;
 import cn.iocoder.common.framework.util.ServiceExceptionUtil;
 import cn.iocoder.mall.admin.api.OAuth2Service;
 import cn.iocoder.mall.admin.api.bo.oauth2.OAuth2AccessTokenBO;
@@ -8,6 +7,7 @@ import cn.iocoder.mall.admin.api.bo.oauth2.OAuth2AuthenticationBO;
 import cn.iocoder.mall.admin.api.constant.AdminErrorCodeEnum;
 import cn.iocoder.mall.admin.api.dto.oauth2.OAuth2CreateTokenDTO;
 import cn.iocoder.mall.admin.api.dto.oauth2.OAuth2GetTokenDTO;
+import cn.iocoder.mall.admin.api.dto.oauth2.OAuth2RefreshTokenDTO;
 import cn.iocoder.mall.admin.convert.OAuth2Convert;
 import cn.iocoder.mall.admin.dao.OAuth2AccessTokenMapper;
 import cn.iocoder.mall.admin.dao.OAuth2RefreshTokenMapper;
@@ -54,9 +54,6 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         OAuth2RefreshTokenDO oAuth2RefreshTokenDO = createOAuth2RefreshToken(userId, userType);
         //创建访问令牌
         OAuth2AccessTokenDO oAuth2AccessTokenDO = createOAuth2AccessToken(userId, userType, oAuth2RefreshTokenDO.getId());
-        if (userId!=null){
-            throw ServiceExceptionUtil.exception(SysErrorCodeEnum.VALIDATION_REQUEST_PARAM_ERROR.getCode());
-        }
         //转换返回
         return OAuth2Convert.INSTANCE.convertToAccessTokenWithExpiresIn(oAuth2AccessTokenDO);
     }
@@ -110,5 +107,27 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         }
         // 转换返回
         return OAuth2Convert.INSTANCE.convertToAuthentication(accessTokenDO);
+    }
+
+
+    @Override
+    public OAuth2AccessTokenBO refreshToken(OAuth2RefreshTokenDTO oAuth2RefreshTokenDTO) {
+        OAuth2RefreshTokenDO refreshTokenDO = oAuth2RefreshTokenMapper.selectById(oAuth2RefreshTokenDTO.getRefreshToken());
+        //校验刷新令牌是否合法
+        if (null == refreshTokenDO) {//不存在
+            throw ServiceExceptionUtil.exception(AdminErrorCodeEnum.OAUTH_INVALID_REFRESH_TOKEN_NOT_FOUND.getCode());
+        }
+        if (refreshTokenDO.getExpiresTime().getTime() < System.currentTimeMillis()) {//已过期
+            throw ServiceExceptionUtil.exception(AdminErrorCodeEnum.OAUTH_INVALID_REFRESH_TOKEN_EXPIRED.getCode());
+        }
+        if (!refreshTokenDO.getValid()) {//无效
+            throw ServiceExceptionUtil.exception(AdminErrorCodeEnum.OAUTH_INVALID_REFRESH_TOKEN_INVALID.getCode());
+        }
+        //标记refreshToken 对应的 accessToken都不合法
+        oauth2AccessTokenMapper.updateToInvalidByRefreshToken(oAuth2RefreshTokenDTO.getRefreshToken());
+        //创建访问令牌
+        OAuth2AccessTokenDO oAuth2AccessToken = createOAuth2AccessToken(refreshTokenDO.getUserId(), refreshTokenDO.getUserType(), refreshTokenDO.getId());
+        //转换返回
+        return OAuth2Convert.INSTANCE.convertToAccessTokenWithExpiresIn(oAuth2AccessToken);
     }
 }
