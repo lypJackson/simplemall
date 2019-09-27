@@ -3,9 +3,11 @@ package cn.iocoder.mall.admin.api.bo.oauth2;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 @Data
-@Accessors
-public class OAuth2AccessTokenBO {
+@Accessors(chain = true)
+public class OAuth2AccessTokenBO implements Serializable {
     /**
      * 访问token
      */

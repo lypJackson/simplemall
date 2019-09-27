@@ -1,6 +1,7 @@
 package cn.iocoder.mall.user.biz.convert;
 
 import cn.iocoder.mall.user.api.bo.UserBO;
+import cn.iocoder.mall.user.api.bo.user.UserAuthenticationBO;
 import cn.iocoder.mall.user.biz.dataobject.UserDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
@@ -13,4 +14,7 @@ public interface UserConvert {
 
     @Mappings({})
     UserBO convert(UserDO userDO);
+
+    @Mappings({})
+    UserAuthenticationBO convert2(UserDO userDO);
 }

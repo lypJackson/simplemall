@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Cors 过滤器
+ * Cors 过滤器,解决跨域的问题
  *
  * 未来使用 {@link org.springframework.web.filter.CorsFilter} 替换
  */
@@ -18,7 +18,9 @@ public class CorsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) response;
+        //指定授权访问的域
         resp.setHeader("Access-Control-Allow-Origin", "*");
+        //授权请求的方法（GET, POST, PUT, DELETE，OPTIONS等)
         resp.setHeader("Access-Control-Allow-Methods", "*");
         resp.setHeader("Access-Control-Allow-Headers", "*");
         resp.setHeader("Access-Control-Max-Age", "1800");

@@ -35,7 +35,7 @@ public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         MallUtil.setUserType(request, UserTypeEnum.USER.getValue());
 
-        // 根据 accessToken 获得认证信息，判断是谁
+        // 获取Headers头，根据 accessToken 获得认证信息，判断是谁
         String accessToken = HttpUtil.obtainAuthorization(request);
         OAuth2AuthenticationBO authentication = null;
         ServiceException serviceException = null;

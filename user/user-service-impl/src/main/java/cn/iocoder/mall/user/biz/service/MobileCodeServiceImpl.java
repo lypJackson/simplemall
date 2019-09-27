@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class MobileCodeServiceImpl {
 
@@ -45,4 +47,14 @@ public class MobileCodeServiceImpl {
         return mobileCodeDO;
     }
 
+    /**
+     * 更新手机验证码已使用
+     *
+     * @param id     验证码编号
+     * @param userId 用户编号
+     */
+    public void useMobileCode(Integer id, Integer userId) {
+        MobileCodeDO mobileCodeDO = new MobileCodeDO().setId(id).setUsed(true).setUsedUserId(userId).setUsedTime(new Date());
+        mobileCodeMapper.updateById(mobileCodeDO);
+    }
 }
