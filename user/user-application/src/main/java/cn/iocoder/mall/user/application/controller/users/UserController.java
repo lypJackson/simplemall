@@ -28,10 +28,10 @@ public class UserController {
 
     @PostMapping("/update_nickname")
     public CommonResult<Boolean> updateNickname(@RequestParam("nickname") String nickname) {
-        // 创建
-        UserUpdateDTO userUpdateDTO = new UserUpdateDTO().setId(null)
+        // 组装数据
+        UserUpdateDTO userUpdateDTO = new UserUpdateDTO().setId(UserSecurityContextHolder.getContext().getUserId())
                 .setNickname(nickname);
-        // 更新头像
+        // 更新昵称
         return success(userService.updateUser(userUpdateDTO));
     }
 }

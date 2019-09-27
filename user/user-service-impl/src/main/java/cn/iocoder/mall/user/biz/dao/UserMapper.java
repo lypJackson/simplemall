@@ -11,4 +11,6 @@ public interface UserMapper {
     UserDO selectByMobile(@Param("mobile") String mobile);
 
     void insert(UserDO entity);
+
+    void update(UserDO entity);
 }

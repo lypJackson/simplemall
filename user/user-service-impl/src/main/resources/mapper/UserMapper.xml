@@ -31,4 +31,26 @@
         WHERE mobile = #{mobile}
         AND deleted = 0
     </select>
+
+    <update id="update" parameterType="UserDO">
+        UPDATE users
+        <set>
+            <if test="mobile != null">
+                , mobile = #{mobile}
+            </if>
+            <if test="nickname != null">
+                , nickname = #{nickname}
+            </if>
+            <if test="avatar != null">
+                , avatar = #{avatar}
+            </if>
+            <if test="status != null">
+                , status = #{status}
+            </if>
+            <if test="deleted != null">
+                , deleted = #{deleted}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

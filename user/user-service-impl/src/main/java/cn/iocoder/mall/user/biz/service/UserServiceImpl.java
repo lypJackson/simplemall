@@ -83,6 +83,9 @@ public class UserServiceImpl implements UserService {
         if (userMapper.selectById(userUpdateDTO.getId()) == null) {
             throw ServiceExceptionUtil.exception(UserErrorCodeEnum.USER_NOT_EXISTS.getCode());
         }
+        //更新用户
+        UserDO updateUser = UserConvert.INSTANCE.convert(userUpdateDTO);
+        userMapper.update(updateUser);
         return true;
     }
 
