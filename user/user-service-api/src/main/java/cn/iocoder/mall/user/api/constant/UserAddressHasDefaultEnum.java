@@ -7,8 +7,8 @@ package cn.iocoder.mall.user.api.constant;
  * @time 2019-04-10 22:02
  */
 public enum UserAddressHasDefaultEnum {
-    DEFAULT_ADDRESS_NO(1, "是默认地址"),
-    DEFAULT_ADDRESS_YES(2, "不是默认地址");
+    DEFAULT_ADDRESS_NO(1, "不是默认地址"),
+    DEFAULT_ADDRESS_YES(2, "是默认地址");
 
     private final int value;
     private final String name;

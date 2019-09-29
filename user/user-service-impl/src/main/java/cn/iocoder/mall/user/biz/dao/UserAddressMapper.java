@@ -16,4 +16,6 @@ public interface UserAddressMapper {
     UserAddressDO selectHasDefault(Integer deleted, Integer userId, Integer hasDefault);
 
     List<UserAddressDO> selectByUserIdAndDeleted(Integer deleted, Integer userId);
+
+    UserAddressDO selectByUserIdAndId(Integer userId, Integer id);
 }

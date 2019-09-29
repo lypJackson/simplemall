@@ -2,6 +2,7 @@ package cn.iocoder.mall.user.biz.convert;
 
 import cn.iocoder.mall.user.api.bo.UserAddressBO;
 import cn.iocoder.mall.user.api.dto.UserAddressAddDTO;
+import cn.iocoder.mall.user.api.dto.UserAddressUpdateDTO;
 import cn.iocoder.mall.user.biz.dataobject.UserAddressDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mappings;
@@ -16,6 +17,12 @@ public interface UserAddressConvert {
 
     @Mappings({})
     UserAddressDO convert(UserAddressAddDTO userAddressAddDTO);
+
+    @Mappings({})
+    UserAddressDO convert(UserAddressUpdateDTO userAddressUpdateDTO);
+
+    @Mappings({})
+    UserAddressBO convert(UserAddressDO userAddressDO);
 
     @Mappings({})
     List<UserAddressBO> convertUserAddressBOList(List<UserAddressDO> userAddressDOList);
