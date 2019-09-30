@@ -61,4 +61,10 @@ public class UserAddressController {
         Integer userId = UserSecurityContextHolder.getContext().getUserId();
         return userAddressService.getAddress(userId, id);
     }
+
+    @GetMapping("default_address")
+    public CommonResult<UserAddressBO> getDefaultAddress() {
+        Integer userId = UserSecurityContextHolder.getContext().getUserId();
+        return userAddressService.getDefaultAddress(userId);
+    }
 }

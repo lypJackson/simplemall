@@ -112,4 +112,12 @@ public class UserAddressServiceImpl implements UserAddressService {
         UserAddressBO userAddressBO = UserAddressConvert.INSTANCE.convert(userAddress);
         return CommonResult.success(userAddressBO);
     }
+
+
+    @Override
+    public CommonResult<UserAddressBO> getDefaultAddress(Integer userId) {
+        UserAddressDO defaultUserAddress = userAddressMapper.selectHasDefault(DeletedStatusEnum.DELETED_NO.getValue(),
+                userId, UserAddressHasDefaultEnum.DEFAULT_ADDRESS_YES.getValue());
+        return CommonResult.success(UserAddressConvert.INSTANCE.convert(defaultUserAddress));
+    }
 }
